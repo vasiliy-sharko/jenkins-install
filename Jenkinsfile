@@ -2,6 +2,7 @@ node {
     def app
 
     stage('Build') {
+        sh 'printenv'
         app = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
     }
     
@@ -11,7 +12,7 @@ node {
 
     stage('Push') {
         docker.withRegistry('https://registry.hub.docker.com', '${DOCKER_CREDS}') {
-            app.push("${env.BUILD_ID}-${env.GIT_COMMIT.take(7)}")
+            app.push("${env.BUILD_ID}")
         }
     }
 }
