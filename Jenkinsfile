@@ -10,12 +10,16 @@ pipeline {
         }
         stage('Test') { 
             steps {
-                echo 'Starting test stage...' 
+                echo 'Starting test stage...'
+                sh 'docker run -t testing:v1'
             }
         }
         stage('Push') { 
             steps {
-                echo 'Starting push stage...' 
+                echo 'Starting push stage...'
+                withCredentials([usernamePassword(credentialsId: '${DOCKER}')]) {
+                    echo '${DOCKER}'
+                }
             }
         }
     }
