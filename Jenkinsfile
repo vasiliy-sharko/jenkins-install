@@ -1,26 +1,17 @@
-pipeline {
-    agent any 
-    stages {
-        stage('Build') { 
-            steps {
-                echo 'Starting build stage...'
-                sh 'ls -la'
-                sh 'docker build -t testing:v1 .'
-            }
-        }
-        stage('Test') { 
-            steps {
-                echo 'Starting test stage...'
-                sh 'docker run -t testing:v1'
-            }
-        }
-        stage('Push') { 
-            steps {
-                echo 'Starting push stage...'
-                withCredentials([usernamePassword(credentialsId: '${DOCKER}')]) {
-                    echo '${DOCKER}'
-                }
-            }
+node {
+    def app
+
+    stage('Build') {
+        app = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+    }
+    
+    stage('Test') {
+        sh "docker run -t ${IMAGE_NAME}:${IMAGE_TAG}"
+    }
+
+    stage('Push') {
+        docker.withRegistry('https://registry.hub.docker.com', '${DOCKER_CREDS}') {
+            app.push("${env.BUILD_ID}")
         }
     }
 }
