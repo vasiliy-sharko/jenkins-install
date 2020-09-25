@@ -2,7 +2,6 @@ node {
     def app
 
     stage('Build') {
-        sh 'printenv'
         app = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
     }
     
@@ -12,8 +11,9 @@ node {
 
     stage('Push') {
         sh 'export COMMIT=$(git rev-parse --short HEAD)'
+        sh 'printenv'
         docker.withRegistry('https://registry.hub.docker.com', '${DOCKER_CREDS}') {
-            app.push("${env.BUILD_ID}")
+            app.push("${env.BUILD_ID}-${COMMIT}")
         }
     }
 }
