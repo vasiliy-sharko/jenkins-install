@@ -11,6 +11,7 @@ node {
     }
 
     stage('Push') {
+        sh "export COMMIT=$(git rev-parse --short HEAD)"
         docker.withRegistry('https://registry.hub.docker.com', '${DOCKER_CREDS}') {
             app.push("${env.BUILD_ID}")
         }
