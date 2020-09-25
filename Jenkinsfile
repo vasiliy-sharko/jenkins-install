@@ -5,6 +5,7 @@ pipeline {
             steps {
                 echo 'Starting build stage...'
                 sh 'ls -la'
+                sh 'docker build -t testing:v1 .'
             }
         }
         stage('Test') { 
