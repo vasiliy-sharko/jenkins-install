@@ -11,7 +11,7 @@ node {
 
     stage('Push') {
         docker.withRegistry('https://registry.hub.docker.com', '${DOCKER_CREDS}') {
-            app.push("${env.BUILD_ID}")
+            app.push("${env.BUILD_ID}-${env.GIT_COMMIT.take(7)}")
         }
     }
 }
