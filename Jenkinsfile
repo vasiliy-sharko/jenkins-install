@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', '${DOCKER_CREDS}') {
-                        app.push("${env.BUILD_ID}-${COMMIT}")                
+                        app.push("${env.BUILD_ID}-${COMMIT_ID}")                
                     }
                 }
             }
