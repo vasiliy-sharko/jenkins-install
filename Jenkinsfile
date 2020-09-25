@@ -6,17 +6,23 @@ pipeline {
     }
     stages {
         stage('Build') {
-            app = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+            steps {
+                app = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+            }
         }
         
         stage('Test') {
-            sh 'docker run -t ${IMAGE_NAME}:${IMAGE_TAG}'
+            steps {
+                sh 'docker run -t ${IMAGE_NAME}:${IMAGE_TAG}'
+            }
         }
         
         stage('Push') {
-            docker.withRegistry('https://registry.hub.docker.com', '${DOCKER_CREDS}') {
-                app.push("${env.BUILD_ID}-${COMMIT}")                
-            }        
+            steps {
+                docker.withRegistry('https://registry.hub.docker.com', '${DOCKER_CREDS}') {
+                    app.push("${env.BUILD_ID}-${COMMIT}")                
+                }
+            }
         }
     }
 
