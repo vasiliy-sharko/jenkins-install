@@ -8,7 +8,9 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    app = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                    docker.withRegistry('https://registry.hub.docker.com', '${DOCKER_CREDS}') {
+                        app = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                    }
                 }
             }
         }
